@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EverFisioTRX | Rehabilitación, TRX & Regulación Nerviosa</title>
+<meta name="description" content="Fisioterapia, entrenamiento TRX y técnicas de regulación del sistema nervioso con Ever Alcántara. Agenda tu sesión online.">
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg2:#111111;
+    --card:#161616;
+    --card2:#1c1c1c;
+    --text:#f2f2f0;
+    --muted:#9a9a95;
+    --accent:#c9ff3f;
+    --accent-dim:rgba(201,255,63,0.12);
+    --border:rgba(255,255,255,0.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+  /* NAV */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(10,10,10,0.75);
+    backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--border);
+  }
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;max-width:1180px;margin:0 auto;}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;font-size:1.1rem;text-transform:uppercase;}
+  .logo .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);box-shadow:0 0 14px var(--accent);}
+  .nav-links{display:flex;gap:32px;font-size:0.92rem;color:var(--muted);}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{
+    background:var(--accent);color:#0a0a0a;padding:10px 20px;border-radius:999px;
+    font-weight:700;font-size:0.88rem;transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,255,63,0.3);}
+  .burger{display:none;}
+
+  /* HERO */
+  .hero{
+    position:relative;min-height:100vh;display:flex;align-items:center;
+    padding-top:90px;overflow:hidden;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(201,255,63,0.08), transparent 45%),
+      radial-gradient(circle at 80% 70%, rgba(80,120,255,0.07), transparent 50%),
+      linear-gradient(180deg, #0a0a0a 0%, #0c0c0c 100%);
+  }
+  .hero-grid{
+    position:absolute;inset:0;
+    background-image:linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(circle at 50% 30%, black, transparent 75%);
+  }
+  .hero-inner{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:60px 24px;width:100%;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--border);padding:7px 16px;border-radius:999px;
+    font-size:0.78rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+    margin-bottom:28px;
+  }
+  .eyebrow .pulse{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+  h1.display{
+    font-size:clamp(2.6rem, 6.5vw, 5.2rem);
+    font-weight:800;line-height:1.02;letter-spacing:-0.03em;
+    max-width:900px;
+  }
+  h1.display em{font-style:normal;color:var(--accent);}
+  .hero p.lead{
+    margin-top:26px;font-size:1.15rem;color:var(--muted);max-width:560px;
+  }
+  .hero-ctas{display:flex;gap:16px;margin-top:40px;flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--accent);color:#0a0a0a;padding:16px 32px;border-radius:999px;
+    font-weight:700;font-size:0.98rem;display:inline-flex;align-items:center;gap:10px;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(201,255,63,0.35);}
+  .btn-ghost{
+    border:1px solid var(--border);padding:16px 32px;border-radius:999px;
+    font-weight:600;font-size:0.98rem;color:var(--text);transition:border-color .15s ease, background .15s ease;
+  }
+  .btn-ghost:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.03);}
+
+  .hero-stats{
+    display:flex;gap:48px;margin-top:70px;flex-wrap:wrap;
+    border-top:1px solid var(--border);padding-top:32px;
+  }
+  .stat .num{font-size:2rem;font-weight:800;color:var(--accent);}
+  .stat .label{font-size:0.82rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px;}
+
+  /* SECTION GENERIC */
+  section{padding:120px 0;}
+  .section-head{max-width:640px;margin-bottom:60px;}
+  .section-tag{
+    font-size:0.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:16px;display:block;
+  }
+  h2.section-title{font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-0.02em;}
+  .section-desc{color:var(--muted);margin-top:18px;font-size:1.05rem;}
+
+  /* ABOUT */
+  .about{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
+  .about-photo{
+    aspect-ratio:4/5;border-radius:24px;overflow:hidden;position:relative;
+    background:linear-gradient(145deg, #1a1a1a, #0c0c0c);
+    border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .about-photo .badge{
+    position:absolute;bottom:20px;left:20px;right:20px;
+    background:rgba(10,10,10,0.7);backdrop-filter:blur(10px);
+    border:1px solid var(--border);border-radius:16px;padding:16px 18px;
+  }
+  .about-photo .badge strong{display:block;font-size:1rem;}
+  .about-photo .badge span{color:var(--muted);font-size:0.85rem;}
+  .about-photo .avatar-circle{
+    width:160px;height:160px;border-radius:50%;
+    background:conic-gradient(from 180deg, var(--accent), #ffd93f, var(--accent));
+    display:flex;align-items:center;justify-content:center;
+    font-size:2.6rem;font-weight:800;color:#0a0a0a;
+  }
+  .cred-list{margin-top:28px;display:flex;flex-direction:column;gap:14px;}
+  .cred-item{display:flex;gap:14px;align-items:flex-start;}
+  .cred-item .ico{
+    width:34px;height:34px;border-radius:10px;background:var(--accent-dim);
+    display:flex;align-items:center;justify-content:center;color:var(--accent);flex-shrink:0;font-weight:800;
+  }
+  .cred-item p{color:var(--muted);font-size:0.95rem;}
+  .cred-item strong{display:block;font-size:0.98rem;margin-bottom:2px;}
+
+  /* SERVICES */
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .service-card{
+    background:var(--card);border:1px solid var(--border);border-radius:20px;
+    padding:32px 28px;transition:transform .2s ease, border-color .2s ease, background .2s ease;
+    display:flex;flex-direction:column;
+  }
+  .service-card:hover{transform:translateY(-6px);border-color:rgba(201,255,63,0.35);background:var(--card2);}
+  .service-icon{
+    width:52px;height:52px;border-radius:14px;background:var(--accent-dim);
+    display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:22px;
+  }
+  .service-card h3{font-size:1.25rem;font-weight:700;margin-bottom:10px;}
+  .service-card p{color:var(--muted);font-size:0.92rem;flex-grow:1;}
+  .service-foot{display:flex;justify-content:space-between;align-items:center;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
+  .service-price{font-weight:800;font-size:1.1rem;}
+  .service-price small{color:var(--muted);font-weight:500;font-size:0.78rem;}
+  .service-link{color:var(--accent);font-size:0.85rem;font-weight:700;}
+
+  /* PRICING */
+  .pricing{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+  .plan-card{
+    background:var(--card);border:1px solid var(--border);border-radius:20px;padding:30px 24px;
+    display:flex;flex-direction:column;position:relative;
+  }
+  .plan-card.featured{border-color:var(--accent);background:linear-gradient(180deg, rgba(201,255,63,0.08), var(--card));}
+  .plan-badge{
+    position:absolute;top:-12px;right:24px;background:var(--accent);color:#0a0a0a;
+    font-size:0.72rem;font-weight:800;padding:5px 12px;border-radius:999px;text-transform:uppercase;letter-spacing:0.5px;
+  }
+  .plan-name{font-size:0.85rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;}
+  .plan-price{font-size:2.4rem;font-weight:800;}
+  .plan-price span{font-size:1rem;color:var(--muted);font-weight:500;}
+  .plan-unit{color:var(--muted);font-size:0.85rem;margin-top:4px;margin-bottom:22px;}
+  .plan-save{color:var(--accent);font-size:0.82rem;font-weight:700;margin-bottom:22px;}
+  .plan-features{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:26px;flex-grow:1;}
+  .plan-features li{font-size:0.88rem;color:var(--muted);display:flex;gap:8px;align-items:flex-start;}
+  .plan-features li::before{content:"✓";color:var(--accent);font-weight:800;}
+  .plan-btn{
+    text-align:center;padding:13px;border-radius:999px;border:1px solid var(--border);font-weight:700;font-size:0.9rem;
+    transition:all .15s ease;
+  }
+  .plan-card.featured .plan-btn{background:var(--accent);color:#0a0a0a;border-color:var(--accent);}
+  .plan-btn:hover{border-color:var(--accent);}
+
+  /* PROCESS */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;counter-reset:step;}
+  .step{position:relative;padding-left:0;}
+  .step-num{
+    font-size:3.2rem;font-weight:800;color:transparent;-webkit-text-stroke:1.5px rgba(255,255,255,0.18);
+    margin-bottom:18px;line-height:1;
+  }
+  .step h3{font-size:1.15rem;font-weight:700;margin-bottom:10px;}
+  .step p{color:var(--muted);font-size:0.92rem;}
+
+  /* TESTIMONIALS */
+  .testimonials{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+  .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .testi-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px;}
+  .stars{color:var(--accent);font-size:0.9rem;margin-bottom:16px;letter-spacing:2px;}
+  .testi-card p{font-size:0.95rem;color:#d8d8d4;margin-bottom:20px;}
+  .testi-author{display:flex;align-items:center;gap:12px;}
+  .testi-avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--accent);font-size:0.9rem;}
+  .testi-author strong{display:block;font-size:0.9rem;}
+  .testi-author span{color:var(--muted);font-size:0.78rem;}
+
+  /* CTA BAND */
+  .cta-band{
+    background:linear-gradient(135deg, #1a2103, #0a0a0a);
+    border:1px solid rgba(201,255,63,0.25);border-radius:28px;
+    padding:70px 50px;text-align:center;margin:0 24px;
+    max-width:1132px;margin:0 auto;
+  }
+  .cta-band h2{font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;margin-bottom:16px;}
+  .cta-band p{color:var(--muted);max-width:480px;margin:0 auto 34px;}
+
+  /* FAQ */
+  .faq-list{display:flex;flex-direction:column;gap:12px;max-width:760px;}
+  .faq-item{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+  .faq-q{padding:20px 24px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:600;font-size:0.98rem;}
+  .faq-q .plus{color:var(--accent);font-size:1.3rem;transition:transform .2s ease;}
+  .faq-item.open .plus{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .25s ease;padding:0 24px;}
+  .faq-item.open .faq-a{max-height:200px;padding-bottom:20px;}
+  .faq-a p{color:var(--muted);font-size:0.92rem;}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border);padding:60px 0 32px;}
+  .footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:50px;}
+  .footer-col h4{font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:18px;}
+  .footer-col a, .footer-col p{display:block;color:var(--muted);font-size:0.9rem;margin-bottom:10px;}
+  .footer-col a:hover{color:var(--text);}
+  .footer-bottom{border-top:1px solid var(--border);padding-top:24px;display:flex;justify-content:space-between;color:var(--muted);font-size:0.82rem;flex-wrap:wrap;gap:10px;}
+  .social-row{display:flex;gap:12px;}
+  .social-row a{
+    width:36px;height:36px;border-radius:50%;border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-size:0.85rem;
+  }
+  .social-row a:hover{border-color:var(--accent);color:var(--accent);}
+
+  @media (max-width: 860px){
+    .nav-links{display:none;}
+    .about-grid{grid-template-columns:1fr;}
+    .services-grid{grid-template-columns:1fr;}
+    .pricing-grid{grid-template-columns:1fr 1fr;}
+    .steps{grid-template-columns:1fr;}
+    .testi-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr 1fr;}
+    .cta-band{padding:50px 24px;}
+  }
+  @media (max-width: 520px){
+    .pricing-grid{grid-template-columns:1fr;}
+    .footer-grid{grid-template-columns:1fr;}
+    .hero-stats{gap:28px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span class="dot"></span>EverFisioTRX</div>
+    <div class="nav-links">
+      <a href="#sobre-mi">Sobre mí</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#precios">Precios</a>
+      <a href="#proceso">Cómo funciona</a>
+      <a href="#testimonios">Testimonios</a>
+      <a href="#faq">Preguntas</a>
+    </div>
+    <a href="reservar.html" class="nav-cta">Reservar sesión →</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="eyebrow"><span class="pulse"></span>Cupos disponibles esta semana en Caracas</div>
+    <h1 class="display">Tu cuerpo y tu <em>sistema nervioso</em>, en un mismo plan de recuperación.</h1>
+    <p class="lead">Fisioterapia, entrenamiento TRX y técnicas de respiración guiadas por Ever Alcántara — Lic. en Rehabilitación y Terapeuta Manual. Agenda tu sesión en menos de 2 minutos.</p>
+    <div class="hero-ctas">
+      <a href="reservar.html" class="btn-primary">Reservar mi sesión →</a>
+      <a href="#servicios" class="btn-ghost">Ver servicios</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="num">800+</div><div class="label">Sesiones realizadas</div></div>
+      <div class="stat"><div class="num">5+</div><div class="label">Años de experiencia</div></div>
+      <div class="stat"><div class="num">4.9★</div><div class="label">Valoración promedio</div></div>
+      <div class="stat"><div class="num">100%</div><div class="label">Planes personalizados</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="about" id="sobre-mi">
+  <div class="wrap about-grid">
+    <div class="about-photo">
+      <div class="avatar-circle">EA</div>
+      <div class="badge">
+        <strong>Ever Alcántara</strong>
+        <span>Fundador · EverFisioTRX</span>
+      </div>
+    </div>
+    <div>
+      <span class="section-tag">Sobre mí</span>
+      <h2 class="section-title">Un enfoque que combina cuerpo, movimiento y sistema nervioso</h2>
+      <p class="section-desc">No trabajo solo el síntoma: integro fisioterapia, entrenamiento funcional en TRX y estrategias de respiración y regulación nerviosa para que la recuperación sea completa y sostenible en el tiempo.</p>
+      <div class="cred-list">
+        <div class="cred-item">
+          <div class="ico">✓</div>
+          <div><strong>Lcdo. en Rehabilitación</strong><p>Formación profesional en fisioterapia y rehabilitación física.</p></div>
+        </div>
+        <div class="cred-item">
+          <div class="ico">✓</div>
+          <div><strong>Certificado TRX® GSTC - STC</strong><p>Entrenamiento en suspensión aplicado a la recuperación y el rendimiento.</p></div>
+        </div>
+        <div class="cred-item">
+          <div class="ico">✓</div>
+          <div><strong>Terapeuta Manual AVTM</strong><p>Técnicas manuales para liberar tensión y restaurar movilidad.</p></div>
+        </div>
+        <div class="cred-item">
+          <div class="ico">✓</div>
+          <div><strong>Trabajo del sistema nervioso</strong><p>Respiración y herramientas de regulación para bajar el estrés del cuerpo.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="servicios">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Servicios</span>
+      <h2 class="section-title">Elige el tipo de sesión que necesitas hoy</h2>
+      <p class="section-desc">Cada sesión es individual y se adapta a tu objetivo: dolor, rendimiento o regulación del sistema nervioso.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🩺</div>
+        <h3>Fisioterapia & Terapia Manual</h3>
+        <p>Evaluación y tratamiento manual para dolor, lesiones y restricciones de movilidad. Incluye plan de ejercicios para casa.</p>
+        <div class="service-foot">
+          <div class="service-price">$60 <small>/ sesión</small></div>
+          <a href="reservar.html?servicio=fisioterapia" class="service-link">Reservar →</a>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🏋️</div>
+        <h3>Entrenamiento TRX</h3>
+        <p>Sesiones de suspensión enfocadas en fuerza funcional, estabilidad y recuperación activa, adaptadas a tu nivel.</p>
+        <div class="service-foot">
+          <div class="service-price">$60 <small>/ sesión</small></div>
+          <a href="reservar.html?servicio=trx" class="service-link">Reservar →</a>
+        </div>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌬️</div>
+        <h3>Respiración & Regulación Nerviosa</h3>
+        <p>Técnicas de respiración y meditación guiada para reducir el estrés y mejorar la recuperación del sistema nervioso.</p>
+        <div class="service-foot">
+          <div class="service-price">$60 <small>/ sesión</small></div>
+          <a href="reservar.html?servicio=respiracion" class="service-link">Reservar →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="precios">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Precios</span>
+      <h2 class="section-title">Paga por sesión o ahorra con un combo</h2>
+      <p class="section-desc">Todos los combos aplican a cualquiera de los tres servicios, combinables entre sí.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">Sesión individual</div>
+        <div class="plan-price">$60</div>
+        <div class="plan-unit">pago único</div>
+        <ul class="plan-features">
+          <li>1 sesión de 60 min</li>
+          <li>Evaluación incluida</li>
+          <li>Plan para casa</li>
+        </ul>
+        <a href="reservar.html?plan=1" class="plan-btn">Elegir plan</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Combo x4</div>
+        <div class="plan-price">$216<span>/combo</span></div>
+        <div class="plan-unit">$54 por sesión</div>
+        <div class="plan-save">Ahorras 10%</div>
+        <ul class="plan-features">
+          <li>4 sesiones</li>
+          <li>Seguimiento de progreso</li>
+          <li>Flexibilidad de horario</li>
+        </ul>
+        <a href="reservar.html?plan=4" class="plan-btn">Elegir plan</a>
+      </div>
+      <div class="plan-card featured">
+        <span class="plan-badge">Más elegido</span>
+        <div class="plan-name">Combo x8</div>
+        <div class="plan-price">$408<span>/combo</span></div>
+        <div class="plan-unit">$51 por sesión</div>
+        <div class="plan-save">Ahorras 15%</div>
+        <ul class="plan-features">
+          <li>8 sesiones</li>
+          <li>Plan de progresión mensual</li>
+          <li>Prioridad de horarios</li>
+        </ul>
+        <a href="reservar.html?plan=8" class="plan-btn">Elegir plan</a>
+      </div>
+      <div class="plan-card">
+        <div class="plan-name">Combo x12</div>
+        <div class="plan-price">$576<span>/combo</span></div>
+        <div class="plan-unit">$48 por sesión</div>
+        <div class="plan-save">Ahorras 20%</div>
+        <ul class="plan-features">
+          <li>12 sesiones</li>
+          <li>Plan trimestral completo</li>
+          <li>Check-in de seguimiento</li>
+        </ul>
+        <a href="reservar.html?plan=12" class="plan-btn">Elegir plan</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="proceso">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Cómo funciona</span>
+      <h2 class="section-title">Agenda tu sesión en 3 pasos</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Elige servicio, día y hora</h3>
+        <p>Selecciona el tipo de sesión y el horario disponible que mejor te funcione en el calendario online.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Confirma tus datos</h3>
+        <p>Completa tu nombre, correo y teléfono. Te enviamos un código de confirmación para validar la reserva.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Llega a tu sesión</h3>
+        <p>Recibe recordatorio antes de tu cita y preséntate en el consultorio o espacio acordado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials" id="testimonios">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Testimonios</span>
+      <h2 class="section-title">Lo que dicen quienes ya entrenan y se recuperan con Ever</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Llegué con dolor lumbar crónico y en 6 sesiones noté un cambio real. El enfoque de respiración fue lo que más me sorprendió."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">MG</div>
+          <div><strong>María G.</strong><span>Combo x8</span></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"El TRX con enfoque terapéutico es distinto a cualquier gimnasio. Ever ajusta todo a tu lesión y tu progreso."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">JP</div>
+          <div><strong>José P.</strong><span>Combo x4</span></div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="stars">★★★★★</div>
+        <p>"Agendar fue súper fácil, todo online. Las sesiones de regulación nerviosa me ayudaron muchísimo con la ansiedad."</p>
+        <div class="testi-author">
+          <div class="testi-avatar">CL</div>
+          <div><strong>Carla L.</strong><span>Sesión individual</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="cta-band">
+      <h2>¿Listo para empezar tu proceso?</h2>
+      <p>Reserva tu primera sesión hoy y recibe una evaluación completa de tu movimiento y sistema nervioso.</p>
+      <a href="reservar.html" class="btn-primary">Reservar mi sesión →</a>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="section-tag">Preguntas frecuentes</span>
+      <h2 class="section-title">Todo lo que necesitas saber</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q">¿Dónde se realizan las sesiones? <span class="plus">+</span></div>
+        <div class="faq-a"><p>Las sesiones se realizan en el consultorio/espacio acordado en Caracas, Venezuela. El lugar exacto se confirma al momento de reservar.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Puedo cambiar la fecha de mi cita? <span class="plus">+</span></div>
+        <div class="faq-a"><p>Sí, puedes reprogramar escribiendo con al menos 12 horas de anticipación al WhatsApp del consultorio.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Los combos vencen? <span class="plus">+</span></div>
+        <div class="faq-a"><p>Los combos tienen una vigencia de 3 meses desde la primera sesión utilizada.</p></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">¿Necesito experiencia previa en TRX? <span class="plus">+</span></div>
+        <div class="faq-a"><p>No. Cada sesión se adapta a tu nivel y objetivo, desde principiantes hasta atletas.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>EverFisioTRX</h4>
+        <p>Fisioterapia, TRX y regulación del sistema nervioso con Ever Alcántara.</p>
+        <div class="social-row">
+          <a href="https://www.instagram.com/everfisiotrx" target="_blank" rel="noopener">IG</a>
+          <a href="#" target="_blank" rel="noopener">WA</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navegación</h4>
+        <a href="#sobre-mi">Sobre mí</a>
+        <a href="#servicios">Servicios</a>
+        <a href="#precios">Precios</a>
+        <a href="#faq">Preguntas</a>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <a href="reservar.html?servicio=fisioterapia">Fisioterapia</a>
+        <a href="reservar.html?servicio=trx">TRX</a>
+        <a href="reservar.html?servicio=respiracion">Respiración</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>Caracas, Venezuela</p>
+        <p>hola@everfisiotrx.com</p>
+        <p>@everfisiotrx</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 EverFisioTRX. Todos los derechos reservados.</span>
+      <span>Sitio de muestra — diseño de reservas online</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.faq-q').forEach(q => {
+  q.addEventListener('click', () => {
+    q.parentElement.classList.toggle('open');
+  });
+});
+</script>
+
+</body>
+</html>
