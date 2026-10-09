@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reservar sesión | EverFisioTRX</title>
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --card:#141414;
+    --card2:#1a1a1a;
+    --text:#f2f2f0;
+    --muted:#9a9a95;
+    --accent:#c9ff3f;
+    --accent-dim:rgba(201,255,63,0.12);
+    --border:rgba(255,255,255,0.1);
+    --danger:#ff6b6b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+    min-height:100vh;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:20px 32px;border-bottom:1px solid var(--border);
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;font-size:1.05rem;text-transform:uppercase;}
+  .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);}
+  .back-link{color:var(--muted);font-size:0.88rem;}
+  .back-link:hover{color:var(--text);}
+
+  .wizard-wrap{max-width:640px;margin:0 auto;padding:48px 24px 100px;}
+
+  .stepper{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:44px;}
+  .step-pill{
+    display:flex;align-items:center;gap:8px;font-size:0.88rem;color:var(--muted);font-weight:600;
+  }
+  .step-circle{
+    width:28px;height:28px;border-radius:50%;border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;
+    color:var(--muted);
+  }
+  .step-pill.active .step-circle{background:var(--accent);color:#0a0a0a;border-color:var(--accent);}
+  .step-pill.active{color:var(--text);}
+  .step-pill.done .step-circle{background:var(--text);color:#0a0a0a;border-color:var(--text);}
+  .step-line{width:40px;height:1px;background:var(--border);}
+
+  .panel{display:none;}
+  .panel.active{display:block;}
+
+  h1.wizard-title{font-size:1.6rem;font-weight:800;margin-bottom:8px;}
+  .wizard-sub{color:var(--muted);font-size:0.95rem;margin-bottom:32px;}
+
+  .field-label{font-size:0.82rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:12px;display:block;font-weight:700;}
+
+  .service-select{display:flex;flex-direction:column;gap:10px;margin-bottom:34px;}
+  .service-opt{
+    display:flex;justify-content:space-between;align-items:center;
+    border:1px solid var(--border);border-radius:14px;padding:16px 18px;cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .service-opt:hover{border-color:rgba(201,255,63,0.4);}
+  .service-opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+  .service-opt .opt-name{font-weight:700;font-size:0.95rem;}
+  .service-opt .opt-desc{color:var(--muted);font-size:0.82rem;margin-top:2px;}
+  .service-opt .opt-price{font-weight:800;color:var(--accent);font-size:0.95rem;}
+
+  .plan-select{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:34px;}
+  .plan-opt{
+    border:1px solid var(--border);border-radius:14px;padding:14px 16px;cursor:pointer;text-align:center;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .plan-opt:hover{border-color:rgba(201,255,63,0.4);}
+  .plan-opt.selected{border-color:var(--accent);background:var(--accent-dim);}
+  .plan-opt .pname{font-size:0.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+  .plan-opt .pprice{font-weight:800;font-size:1.1rem;margin-top:4px;}
+  .plan-opt .psave{font-size:0.74rem;color:var(--accent);margin-top:2px;font-weight:700;}
+
+  .week-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .week-nav button{
+    background:none;border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:50%;
+    cursor:pointer;font-size:1rem;
+  }
+  .week-nav button:hover{border-color:var(--accent);color:var(--accent);}
+  .week-label{font-weight:700;font-size:0.95rem;}
+
+  .day-row{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-bottom:28px;}
+  .day-cell{
+    border:1px solid var(--border);border-radius:12px;padding:12px 4px;text-align:center;cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .day-cell .dow{font-size:0.7rem;color:var(--muted);text-transform:uppercase;}
+  .day-cell .dnum{font-size:1.1rem;font-weight:700;margin-top:4px;}
+  .day-cell:hover:not(.disabled){border-color:rgba(201,255,63,0.4);}
+  .day-cell.selected{border-color:var(--accent);background:var(--accent-dim);}
+  .day-cell.disabled{opacity:0.3;cursor:not-allowed;}
+
+  .slot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:34px;}
+  .slot{
+    border:1px solid var(--border);border-radius:10px;padding:12px 6px;text-align:center;cursor:pointer;font-size:0.9rem;font-weight:600;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .slot:hover:not(.taken){border-color:rgba(201,255,63,0.4);}
+  .slot.selected{border-color:var(--accent);background:var(--accent-dim);color:var(--accent);}
+  .slot.taken{opacity:0.25;cursor:not-allowed;text-decoration:line-through;}
+  .slot-empty{color:var(--muted);font-size:0.88rem;grid-column:1/-1;text-align:center;padding:20px 0;}
+
+  .summary-card{
+    background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px 24px;margin-bottom:28px;
+  }
+  .summary-tag{font-size:0.74rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:16px;font-weight:700;}
+  .summary-row{display:flex;justify-content:space-between;padding:9px 0;font-size:0.92rem;border-bottom:1px solid var(--border);}
+  .summary-row:last-child{border-bottom:none;}
+  .summary-row span:first-child{color:var(--muted);}
+  .summary-row.total{border-top:1px solid var(--border);margin-top:4px;padding-top:14px;font-weight:800;font-size:1.05rem;}
+  .summary-row.total span:last-child{color:var(--accent);}
+
+  input[type=text], input[type=email], input[type=tel], textarea{
+    width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);
+    padding:14px 16px;border-radius:12px;font-size:0.95rem;margin-bottom:20px;font-family:inherit;
+  }
+  input:focus, textarea:focus{outline:none;border-color:var(--accent);}
+  textarea{resize:vertical;min-height:80px;}
+
+  .btn-main{
+    width:100%;background:var(--accent);color:#0a0a0a;border:none;padding:17px;border-radius:999px;
+    font-weight:800;font-size:1rem;cursor:pointer;transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-main:hover{transform:translateY(-1px);box-shadow:0 10px 26px rgba(201,255,63,0.3);}
+  .btn-main:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-secondary{
+    width:100%;background:none;border:1px solid var(--border);color:var(--text);padding:16px;border-radius:999px;
+    font-weight:700;font-size:0.95rem;cursor:pointer;margin-top:12px;
+  }
+  .btn-secondary:hover{border-color:rgba(255,255,255,0.3);}
+  .link-back{display:block;text-align:center;color:var(--muted);font-size:0.85rem;margin-top:20px;cursor:pointer;}
+  .link-back:hover{color:var(--text);}
+
+  .otp-row{display:flex;gap:10px;margin-bottom:22px;}
+  .otp-row input{
+    width:52px;height:60px;text-align:center;font-size:1.3rem;font-weight:800;margin-bottom:0;padding:0;
+  }
+
+  .success-wrap{text-align:center;padding:40px 0;}
+  .success-icon{
+    width:80px;height:80px;border-radius:50%;background:var(--accent-dim);border:2px solid var(--accent);
+    display:flex;align-items:center;justify-content:center;font-size:2.2rem;margin:0 auto 28px;color:var(--accent);
+  }
+  .success-wrap h1{font-size:1.5rem;font-weight:800;margin-bottom:10px;}
+  .success-wrap p{color:var(--muted);margin-bottom:30px;}
+
+  .notice{
+    background:var(--accent-dim);border:1px solid rgba(201,255,63,0.3);border-radius:12px;
+    padding:12px 16px;font-size:0.82rem;color:#d7ffa0;margin-bottom:28px;line-height:1.5;
+  }
+
+  @media (max-width:520px){
+    .slot-grid{grid-template-columns:repeat(2,1fr);}
+    .plan-select{grid-template-columns:1fr;}
+    .day-row{gap:5px;}
+    .day-cell{padding:8px 2px;}
+    .otp-row input{width:42px;height:52px;font-size:1.1rem;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span class="dot"></span>EverFisioTRX</div>
+  <a href="index.html" class="back-link">← Volver al sitio</a>
+</header>
+
+<div class="wizard-wrap">
+
+  <div class="stepper">
+    <div class="step-pill active" id="pill-1">
+      <div class="step-circle">1</div><span>Turno</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-pill" id="pill-2">
+      <div class="step-circle">2</div><span>Confirmar</span>
+    </div>
+    <div class="step-line"></div>
+    <div class="step-pill" id="pill-3">
+      <div class="step-circle">3</div><span>Listo</span>
+    </div>
+  </div>
+
+  <!-- PANEL 1: TURNO -->
+  <div class="panel active" id="panel-1">
+    <h1 class="wizard-title">Elige tu sesión</h1>
+    <p class="wizard-sub">Selecciona servicio, plan, día y hora disponible.</p>
+
+    <span class="field-label">Servicio</span>
+    <div class="service-select" id="service-select">
+      <div class="service-opt" data-service="fisioterapia">
+        <div><div class="opt-name">Fisioterapia & Terapia Manual</div><div class="opt-desc">Evaluación + tratamiento manual · 60 min</div></div>
+        <div class="opt-price">$60</div>
+      </div>
+      <div class="service-opt" data-service="trx">
+        <div><div class="opt-name">Entrenamiento TRX</div><div class="opt-desc">Fuerza funcional y recuperación activa · 60 min</div></div>
+        <div class="opt-price">$60</div>
+      </div>
+      <div class="service-opt" data-service="respiracion">
+        <div><div class="opt-name">Respiración & Regulación Nerviosa</div><div class="opt-desc">Técnicas guiadas de respiración · 60 min</div></div>
+        <div class="opt-price">$60</div>
+      </div>
+    </div>
+
+    <span class="field-label">Plan</span>
+    <div class="plan-select" id="plan-select">
+      <div class="plan-opt" data-plan="1" data-price="60">
+        <div class="pname">1 sesión</div><div class="pprice">$60</div>
+      </div>
+      <div class="plan-opt" data-plan="4" data-price="216">
+        <div class="pname">Combo x4</div><div class="pprice">$216</div><div class="psave">Ahorras 10%</div>
+      </div>
+      <div class="plan-opt" data-plan="8" data-price="408">
+        <div class="pname">Combo x8</div><div class="pprice">$408</div><div class="psave">Ahorras 15%</div>
+      </div>
+      <div class="plan-opt" data-plan="12" data-price="576">
+        <div class="pname">Combo x12</div><div class="pprice">$576</div><div class="psave">Ahorras 20%</div>
+      </div>
+    </div>
+
+    <span class="field-label">Día (primera sesión)</span>
+    <div class="week-nav">
+      <button id="week-prev" type="button">←</button>
+      <div class="week-label" id="week-label">Semana actual</div>
+      <button id="week-next" type="button">→</button>
+    </div>
+    <div class="day-row" id="day-row"></div>
+
+    <span class="field-label">Hora disponible</span>
+    <div class="slot-grid" id="slot-grid"><div class="slot-empty">Elige un día para ver horarios</div></div>
+
+    <button class="btn-main" id="btn-to-confirm" disabled>Continuar →</button>
+  </div>
+
+  <!-- PANEL 2: CONFIRMAR -->
+  <div class="panel" id="panel-2">
+    <h1 class="wizard-title">Confirma tu reserva</h1>
+    <p class="wizard-sub">Revisa el resumen y completa tus datos de contacto.</p>
+
+    <div class="summary-card" id="summary-card"></div>
+
+    <span class="field-label">Tus datos</span>
+    <input type="text" id="inp-name" placeholder="Nombre completo *">
+    <input type="email" id="inp-email" placeholder="Email *">
+    <input type="tel" id="inp-phone" placeholder="WhatsApp / Teléfono *">
+    <textarea id="inp-notes" placeholder="¿Algo que debamos saber? (lesiones, objetivos, disponibilidad...)"></textarea>
+
+    <div class="notice">📩 Este es un sitio de muestra. En la versión real, aquí se enviaría un código de verificación por email o WhatsApp y se procesaría el pago de la seña, igual que en el flujo de referencia.</div>
+
+    <button class="btn-main" id="btn-confirm">Confirmar reserva →</button>
+    <span class="link-back" id="link-back-1">← Volver a elegir turno</span>
+  </div>
+
+  <!-- PANEL 3: LISTO -->
+  <div class="panel" id="panel-3">
+    <div class="success-wrap">
+      <div class="success-icon">✓</div>
+      <h1>¡Reserva confirmada!</h1>
+      <p id="success-detail">Te esperamos en tu sesión.</p>
+      <div class="summary-card" id="summary-card-2" style="text-align:left;"></div>
+      <a href="index.html" class="btn-secondary" style="display:block;">Volver al inicio</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const SERVICES = {
+  fisioterapia: { name: "Fisioterapia & Terapia Manual" },
+  trx: { name: "Entrenamiento TRX" },
+  respiracion: { name: "Respiración & Regulación Nerviosa" },
+};
+const PLAN_LABELS = { "1":"1 sesión", "4":"Combo x4", "8":"Combo x8", "12":"Combo x12" };
+
+const state = {
+  service: null,
+  plan: null,
+  price: null,
+  dateObj: null,
+  dateLabel: null,
+  time: null,
+  weekOffset: 0,
+};
+
+// Preselect service from query string
+const params = new URLSearchParams(window.location.search);
+const qServicio = params.get('servicio');
+const qPlan = params.get('plan');
+
+function initServiceSelect(){
+  document.querySelectorAll('.service-opt').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.service-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      state.service = el.dataset.service;
+      validateStep1();
+    });
+  });
+  if (qServicio && SERVICES[qServicio]) {
+    const el = document.querySelector('.service-opt[data-service="'+qServicio+'"]');
+    if (el) el.click();
+  }
+}
+
+function initPlanSelect(){
+  document.querySelectorAll('.plan-opt').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.plan-opt').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+      state.plan = el.dataset.plan;
+      state.price = el.dataset.price;
+      validateStep1();
+    });
+  });
+  const defaultPlan = (qPlan && PLAN_LABELS[qPlan]) ? qPlan : "1";
+  const el = document.querySelector('.plan-opt[data-plan="'+defaultPlan+'"]');
+  if (el) el.click();
+}
+
+const DOW = ['DOM','LUN','MAR','MIÉ','JUE','VIE','SÁB'];
+const MONTHS = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+function startOfWeek(d){
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = date.getDate() - day; // week starts Sunday
+  return new Date(date.setDate(diff));
+}
+
+function renderWeek(){
+  const today = new Date();
+  today.setHours(0,0,0,0);
+  const base = new Date(today);
+  base.setDate(base.getDate() + state.weekOffset * 7);
+  const weekStart = startOfWeek(base);
+
+  const dayRow = document.getElementById('day-row');
+  dayRow.innerHTML = '';
+  let labelParts = [];
+
+  for (let i=0; i<7; i++){
+    const d = new Date(weekStart);
+    d.setDate(d.getDate() + i);
+    const disabled = d < today;
+    const cell = document.createElement('div');
+    cell.className = 'day-cell' + (disabled ? ' disabled' : '');
+    cell.innerHTML = '<div class="dow">'+DOW[d.getDay()]+'</div><div class="dnum">'+d.getDate()+'</div>';
+    if (!disabled){
+      cell.addEventListener('click', () => selectDay(d, cell));
+    }
+    dayRow.appendChild(cell);
+    if (i===0 || i===6) labelParts.push(d.getDate()+' '+MONTHS[d.getMonth()]);
+  }
+  document.getElementById('week-label').textContent = labelParts.join(' – ');
+}
+
+function selectDay(d, cell){
+  document.querySelectorAll('.day-cell').forEach(c => c.classList.remove('selected'));
+  cell.classList.add('selected');
+  state.dateObj = d;
+  state.dateLabel = DOW[d.getDay()] + ' ' + d.getDate() + ' de ' + MONTHS[d.getMonth()] + ' de ' + d.getFullYear();
+  renderSlots(d);
+  validateStep1();
+}
+
+// Deterministic pseudo-availability so the demo looks realistic without a backend
+function seededTaken(dateKey, time){
+  let h = 0;
+  const str = dateKey + time;
+  for (let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) >>> 0; }
+  return (h % 5) === 0; // ~20% slots look "taken"
+}
+
+function renderSlots(d){
+  const slotGrid = document.getElementById('slot-grid');
+  slotGrid.innerHTML = '';
+  const hours = ['08:00','09:00','10:00','11:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+  const dateKey = d.toISOString().slice(0,10);
+  state.time = null;
+
+  hours.forEach(h => {
+    const taken = seededTaken(dateKey, h);
+    const slot = document.createElement('div');
+    slot.className = 'slot' + (taken ? ' taken' : '');
+    slot.textContent = h;
+    if (!taken){
+      slot.addEventListener('click', () => {
+        document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+        slot.classList.add('selected');
+        state.time = h;
+        validateStep1();
+      });
+    }
+    slotGrid.appendChild(slot);
+  });
+}
+
+function validateStep1(){
+  const ok = state.service && state.plan && state.dateObj && state.time;
+  document.getElementById('btn-to-confirm').disabled = !ok;
+}
+
+document.getElementById('week-prev').addEventListener('click', () => {
+  if (state.weekOffset > 0) state.weekOffset--;
+  renderWeek();
+});
+document.getElementById('week-next').addEventListener('click', () => {
+  state.weekOffset++;
+  renderWeek();
+});
+
+function buildSummaryHTML(){
+  const serviceName = SERVICES[state.service] ? SERVICES[state.service].name : '—';
+  const planLabel = PLAN_LABELS[state.plan] || '—';
+  return `
+    <div class="summary-tag">EverFisioTRX — Resumen</div>
+    <div class="summary-row"><span>Servicio</span><span>${serviceName}</span></div>
+    <div class="summary-row"><span>Plan</span><span>${planLabel}</span></div>
+    <div class="summary-row"><span>Fecha</span><span>${state.dateLabel}</span></div>
+    <div class="summary-row"><span>Hora</span><span>${state.time} hs</span></div>
+    <div class="summary-row total"><span>Total</span><span>$${state.price}</span></div>
+  `;
+}
+
+document.getElementById('btn-to-confirm').addEventListener('click', () => {
+  document.getElementById('summary-card').innerHTML = buildSummaryHTML();
+  goToStep(2);
+});
+
+document.getElementById('link-back-1').addEventListener('click', () => goToStep(1));
+
+document.getElementById('btn-confirm').addEventListener('click', () => {
+  const name = document.getElementById('inp-name').value.trim();
+  const email = document.getElementById('inp-email').value.trim();
+  const phone = document.getElementById('inp-phone').value.trim();
+  if (!name || !email || !phone){
+    alert('Por favor completa nombre, email y teléfono para confirmar.');
+    return;
+  }
+  // Save demo booking to localStorage (no backend in this mockup)
+  const bookings = JSON.parse(localStorage.getItem('everfisiotrx_bookings') || '[]');
+  bookings.push({
+    service: state.service, plan: state.plan, price: state.price,
+    date: state.dateLabel, time: state.time,
+    name, email, phone,
+    notes: document.getElementById('inp-notes').value.trim(),
+    createdAt: new Date().toISOString()
+  });
+  localStorage.setItem('everfisiotrx_bookings', JSON.stringify(bookings));
+
+  document.getElementById('success-detail').textContent =
+    'Te esperamos el ' + state.dateLabel + ' a las ' + state.time + ' hs. Enviamos la confirmación a ' + email + '.';
+  document.getElementById('summary-card-2').innerHTML = buildSummaryHTML();
+  goToStep(3);
+});
+
+function goToStep(n){
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+n).classList.add('active');
+  [1,2,3].forEach(i => {
+    const pill = document.getElementById('pill-'+i);
+    pill.classList.remove('active','done');
+    if (i < n) pill.classList.add('done');
+    if (i === n) pill.classList.add('active');
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+initServiceSelect();
+initPlanSelect();
+renderWeek();
+</script>
+
+</body>
+</html>
